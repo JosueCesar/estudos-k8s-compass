@@ -1,0 +1,15 @@
+secretGenerator:
+- name: mysql-pass
+  namespace: labwordpress
+  literals:
+  - password=394tgiODS3qwre-0d
+resources:
+  - namespace.yaml
+
+  - ./mysql/1-pv.yaml
+  - ./mysql/2-deployment.yaml
+  - ./mysql/3-svc.yaml
+
+  - ./wordpress/1-pv.yaml
+  - ./wordpress/2-deployment.yaml
+  - ./wordpress/3-svc.yaml

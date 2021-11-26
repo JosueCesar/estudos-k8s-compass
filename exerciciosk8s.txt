@@ -1,0 +1,95 @@
+Pré-requisitos para o ambiente de kubernetes:
+
+Entre no site https://docs.docker.com/desktop/windows/install/
+Clique no botão "Docker Desktop for Windows"
+Após instalar o Docker for Windows, abra-o
+Clique no ícone na engrenagem > Kubernetes > enable kubernetes
+Após isso, via CMD do Windows, você poderá executar comandos via kubectl
+ 
+
+Observações:
+
+Atividade 1 – múltiplos nginx
+
+Material de apoio: https://kubernetes.io/docs/tasks/run-application/run-stateless-application-deployment/ 
+
+ 
+
+Crie um namespace chamado labnginx. 
+
+Faça o apply de dois pods nginx neste namespace, dentro de um único ingress, onde o Load balancer distribuirá a carga entre estes dois pods.
+
+Abra o browser e faça o teste no seu navegador se a tela padrão do nginx abrirá para você. 
+
+Dica: Verifique qual o ingress que foi gerado no kubernetes, se atente de localizar dentro do namespace criado por você. 
+
+Faça um describe dos pods Nginx criados por você. Qual o IP que foi estabelecido para cada pod?
+
+Verifique logs dos dois pods Nginx criados por você, que informações são mostradas? 
+ 
+
+ 
+
+Atividade 2 – wordpress no k8s
+
+Material de apoio: https://kubernetes.io/docs/tutorials/stateful-application/mysql-wordpress-persistent-volume/ 
+
+ 
+
+Crie um namespace chamado labwordpress, tudo o que for feito deverá estar dentro deste namespace; 
+Faça o apply do arquivo de service do MySQL mude a porta padrão do banco MySQL para 3308; 
+Crie o arquivo secret que deverá conter o password do banco MySQL, lembre-se de criar uma senha com fortes padrões de segurança; 
+Faça o apply do arquivo de PersistentVolumeClaim do MySQL para um capacity de 3GB; 
+Faça o apply do arquivo de deployment do MySQL, crie também um volume mount no deployment do MySQL chamado “mysql-persistent-storage-lab", apontando para /var/lib/mysql. Lembre-se de criar o volume em si com o mesmo nome do volume mount; 
+Faça o apply do arquivo de service do Wordpress altere para a TCP Port 80; 
+Faça o apply do arquivo de PersistentVolumeClaim do Wordpress, para um capacity de 3GB; 
+No arquivo de deployment do Wordpress, crie um volume mount no deployment do Wordpress chamado “wordpress-persistent-storage-lab", apontando para /var/www/html. Lembre-se de criar o volume em si com o mesmo nome do volume mount; 
+No arquivo de deployment do wordpress, insira o secret contendo o password do MySQL, criado no começo do exercício. 
+Faça o apply do arquivo de deployment do wordpress; 
+Verifque se os pods, os services e os pvcs foram criados da forma correta dentro namespace criado no início deste exercício; 
+Verifique qual foi a URI gerada através do ingress do Kubernetes; 
+Copie essa URI do Ingress e cole no browser para abrir a tela inicial do wordpress
+
+
+
+Atividade 3 - Apache no k8s usando shared volumes
+
+Crie um namespace chamado labapache, tudo o que for feito deverá estar dentro deste namespace; 
+
+Crie um deployment de um conteúdo web static utilizando com webserver um apache:latest
+
+Crie um ingress para este deployment, use hostname de sua preferência, utilize a porta 80, na rota "/".
+
+Crie um volume persistente para esta aplicação com um storage de 2GB
+
+Crie um mountPath simples com a path: "/data"
+
+Verifique se a aplicação está no ar e criada da forma da correta
+
+Copie essa URI do Ingress e cole no browser para abrir a tela inicial do apache
+
+
+
+Atividade 4 - Deployment Nginx com Configmap
+
+Crie um namespace chamado labconfmap, tudo o que for feito deverá estar dentro deste namespace;
+Faça um deployment de um webserver com uma imagem nginx;
+Crie um ingress para este deployment, crie o hostname labconfmap , utilize a porta 80, na rota "/".
+Crie um configmap para as configurações do arquivo nginx-conf, segue abaixo a configuração que deverá fazer parte do configmap:
+  nginx.conf: |
+    user nginx;
+    worker_processes  1;
+    events {
+      worker_connections  10240;
+    }
+    http {
+      server {
+          listen       80;
+          server_name  labconfmap;
+          location / {
+            root   /usr/share/nginx/html;
+            index  index.html index.htm;
+        }
+      }
+    }
+Dentro o manifesto do deployment, crie a linha referente a este configmap como "nginx-conf" onde a key e path deverão estar setadas como "nginx.conf", crie um volume chamado "nginx-conf" e por fim, crie um volume mount chamado "nginx-conf" com o mountPath setado para o caminho: /etc/nginx/nginx.conf, e a subpath setada como "nginx.conf"

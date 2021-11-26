@@ -1,0 +1,5 @@
+resources:
+  - 1-namespace.yaml
+  - 2-deployment.yaml
+  - 3-service.yaml
+  - 4-ingress.yaml
