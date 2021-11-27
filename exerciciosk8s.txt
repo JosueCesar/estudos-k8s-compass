@@ -73,9 +73,13 @@ Copie essa URI do Ingress e cole no browser para abrir a tela inicial do apache
 Atividade 4 - Deployment Nginx com Configmap
 
 Crie um namespace chamado labconfmap, tudo o que for feito deverá estar dentro deste namespace;
+
 Faça um deployment de um webserver com uma imagem nginx;
+
 Crie um ingress para este deployment, crie o hostname labconfmap , utilize a porta 80, na rota "/".
+
 Crie um configmap para as configurações do arquivo nginx-conf, segue abaixo a configuração que deverá fazer parte do configmap:
+
   nginx.conf: |
     user nginx;
     worker_processes  1;
@@ -92,4 +96,5 @@ Crie um configmap para as configurações do arquivo nginx-conf, segue abaixo a 
         }
       }
     }
+    
 Dentro o manifesto do deployment, crie a linha referente a este configmap como "nginx-conf" onde a key e path deverão estar setadas como "nginx.conf", crie um volume chamado "nginx-conf" e por fim, crie um volume mount chamado "nginx-conf" com o mountPath setado para o caminho: /etc/nginx/nginx.conf, e a subpath setada como "nginx.conf"

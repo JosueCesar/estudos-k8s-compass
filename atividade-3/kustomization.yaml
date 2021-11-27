@@ -3,3 +3,4 @@ resources:
   - 2-pv.yaml
   - 3-deployment.yaml
   - 4-svc.yaml
+  - 5-ingress.yaml

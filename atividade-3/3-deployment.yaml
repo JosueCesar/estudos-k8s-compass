@@ -1,22 +1,29 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: httpd-deployment-nautilus
+  name: apache-deployment
   namespace: labapache
   labels:
-    app: httpd_app_nautilus
+    app: apache_app
 spec:
   replicas: 2
   selector:
     matchLabels:
-      app: httpd_app_nautilus
+      app: apache_app
   template:
     metadata:
       labels:
-        app: httpd_app_nautilus
+        app: apache_app
     spec:
       containers:
-        - name: httpd-container-nautilus
+        - name: apache-container
           image: httpd:latest
           ports:
-            - containerPort: 80
+          - containerPort: 80
+          volumeMounts:
+          - name: apache-app-pv
+            mountPath: /data
+      volumes:
+      - name: apache-app-pv
+        persistentVolumeClaim:
+          claimName: apache-pv-claim
