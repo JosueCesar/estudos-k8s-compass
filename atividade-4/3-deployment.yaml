@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-deployment
+  namespace: labconfmap
+  labels:
+    app: confmap-nginx
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: confmap-nginx
+  template:
+    metadata:
+      labels:
+        app: confmap-nginx
+    spec:
+      containers:
+        - name: confmap-nginx
+          image: nginx:latest
+          ports:
+            - containerPort: 80
+          volumeMounts:
+            - mountPath: /etc/nginx
+              name: nginx-conf
+      volumes:
+        - name: nginx-conf
+          configMap:
+            name: nginx-conf
+            items:
+              - key: nginx.conf
+                path: nginx.conf
